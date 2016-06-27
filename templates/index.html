@@ -1,0 +1,102 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Useful Client</title>
+
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+      <style>
+          td{padding:5px;}
+          a{color:black;}
+      </style>
+
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">zbclient</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">zbclient</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="margin-top:8%">
+        <div class="col-md-9">
+            <input type="text" class="form-control" id="url" placeholder="url">
+        </div>
+        <div class="col-md-3">
+            <div class="btn-group dropdown">
+              <button class="btn btn-default" id="now_method">GET</button>
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a href="#" class="method">GET</a></li>
+                <li><a href="#" class="method">POST</a></li>
+              </ul>
+            </div>
+
+            <button class="btn btn-success" style="margin-left:20px;" id="send">
+                <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+                &nbsp;&nbsp;Send&nbsp;
+            </button>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top:1%">
+        <div>
+            QUERY PARAMETERS
+        </div>
+        <table class="table jumbotron form-inline" id="table_params" style="margin-left:1%">
+
+        </table>
+        <div style="margin-top:-15px;margin-left:1%">
+            <a><span class="glyphicon glyphicon-plus" aria-hidden="true" id="add_param"></span></a>
+        </div>
+    </div>
+    <hr>
+
+    <div class="container" style="margin-top:2%">
+        <div class='margin-left'>HEADERS</div>
+        <table class="form-inline" border="0" id="table_headers">
+
+        </table>
+        <div style="margin-top:5px">
+            <a><span class="glyphicon glyphicon-plus" aria-hidden="true" id="add_header"></span></a>
+        </div>
+    </div>
+    <hr>
+    <div class="container">
+        <div class="margin-left">
+            RESPONSE
+        </div>
+        <div class="alert" role="alert" id="status_code" style="margin-top:10px;" hidden></div>
+        <textarea class="form-control" rows="20" id="result">
+
+        </textarea>
+    </div>
+
+    <div class="container text-center" style="margin-top:50px;margin-bottom:20px;">
+        <span class="label label-info">jacsice@2016</span>
+    </div>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.9.1.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/format.js' %}"></script>
+  </body>
+</html>
