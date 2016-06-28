@@ -49,7 +49,7 @@
             data['url'] = url;
             data['method'] = method;
             $.ajax({
-              url: '/client/',
+              url: '/client/format/',
               type: 'POST',
               dataType: 'json',
               data: data,
@@ -57,18 +57,23 @@
                 $("#send").attr('disabled', 'disabled');
               },
               success:function(data) {
-                    $("#status_code").addClass('alert-success').show();
-                    $("#status_code").html("200");
+                    var status_css = '';
+                    if (data.http_code == 200){
+                        status_css = 'alert-success';
+                    }else{
+                        status_css = 'alert-danger';
+                    }
+                    $("#status_code").addClass(status_css).show();
+                    $("#status_code").html(data.http_code);
                     $("#send").removeAttr('disabled');
-                    $("#result").html(JSON.stringify(data, null, 4));
-              },
-              error: function (jqxhr, status, errorThrown) {
-                $("#status_code").addClass('alert-danger').show();
-                $("#status_code").html("ERROR");
+                    $("#result").html(JSON.stringify(data.result, null, 4));
+                    $('#result').JSONView($("#result").html());
               },
             });
             $("#send").removeAttr('disabled');
         });
+
+
 
         $(".method").click(function(){
             $("#now_method").html($(this).html());
@@ -93,9 +98,12 @@
         function rebuild_headers(){
             var headers = {};
             $(".checkbox_header:checkbox:checked").each(function(){
-                var key = $(this).next();
-                var value = $(this).next().next();
-                headers[key.val()] = value.val();
+                var key = $(this).next().val();
+                var value = $(this).next().next().val();
+
+                if(key.length > 0 && value.length > 0){
+                    headers[key] = value;
+                }
             });
             return headers;
         }
