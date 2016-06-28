@@ -19,10 +19,12 @@ def home(request, template_name='index.html'):
 @csrf_exempt
 def format(request):
     result = {}
+    text_type = 'json'
     try:
         method = request.POST.get('method', '')
         url = request.POST.get('url', '')
         headers = request.POST.get('headers', {})
+
         if headers:
             headers = eval(headers)
         else:
@@ -30,16 +32,23 @@ def format(request):
 
         if method == 'GET':
             response = requests.get(str(url), headers=headers)
-            http_code = response.status_code
-            if http_code == 200:
-                try:
-                    data = response.json()
-                except Exception, e:
-                    data = response.text
-                    logging.error(e)
-            else:
+        else:
+            response = requests.post(str(url), headers=headers)
+
+        http_code = response.status_code
+        if http_code == 200:
+            try:
+                data = response.json()
+            except Exception, e:
                 data = response.text
-            result.update({'http_code': http_code, 'result': data})
+                text_type = 'text'
+                logging.error(e)
+        else:
+            data = response.text
+            text_type = 'text'
+
+        result.update({'http_code': http_code, 'result': data, 'text_type': text_type})
     except Exception, e:
         logging.error(e)
+        result.update({'http_code': "ERROR", 'result': {}, 'text_type': text_type})
     return HttpResponse(json.dumps(result))

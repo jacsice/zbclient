@@ -48,14 +48,15 @@
             data['headers'] = JSON.stringify(rebuild_headers());
             data['url'] = url;
             data['method'] = method;
+
+            abort_status()
+
+            var request =
             $.ajax({
               url: '/client/format/',
               type: 'POST',
               dataType: 'json',
               data: data,
-              beforeSend: function () {
-                $("#send").attr('disabled', 'disabled');
-              },
               success:function(data) {
                     var status_css = '';
                     if (data.http_code == 200){
@@ -65,12 +66,21 @@
                     }
                     $("#status_code").addClass(status_css).show();
                     $("#status_code").html(data.http_code);
-                    $("#send").removeAttr('disabled');
-                    $("#result").html(JSON.stringify(data.result, null, 4));
-                    $('#result').JSONView($("#result").html());
+                    if(data.text_type == 'json'){
+                        $("#result").html(JSON.stringify(data.result, null, 4));
+                        $('#result').JSONView($("#result").html());
+                    }else{
+                        $("#result").html(data.result);
+                    }
+              },
+              complete: function(){
+                 request_status()
               },
             });
-            $("#send").removeAttr('disabled');
+
+            $(".abort").click(function(){
+                request.abort();
+            });
         });
 
 
@@ -78,6 +88,36 @@
         $(".method").click(function(){
             $("#now_method").html($(this).html());
         });
+
+        $("#param_switch").click(function(){
+            var value = $(this).attr("value");
+            if (value == "1"){
+                $("#table_params").hide();
+                $(this).attr("value", "0");
+                $(this).removeClass("glyphicon glyphicon-menu-up");
+                $(this).addClass("glyphicon glyphicon-menu-down");
+            }else{
+                $("#table_params").show();
+                $(this).attr("value", "1");
+                $(this).removeClass("glyphicon glyphicon-menu-down");
+                $(this).addClass("glyphicon glyphicon-menu-up");
+            }
+        });
+
+        function abort_status(){
+            $("#send").addClass('abort');
+            $("#send").addClass('btn-danger');
+            $("#send").removeClass('btn-success');
+            $("#request_status").html('&nbsp;&nbsp;Cancel&nbsp&nbsp;');
+            $("#status_code").attr("class", 'alert');
+        }
+
+        function request_status(){
+            $("#send").removeClass('abort');
+            $("#send").addClass('btn-success');
+            $("#send").removeClass('btn-danger');
+            $("#request_status").html('&nbsp;&nbsp;Send&nbsp&nbsp;');
+        }
 
         function remove_this(obj){
             $(obj).parent().parent().remove();
