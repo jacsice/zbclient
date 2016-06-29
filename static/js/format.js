@@ -53,7 +53,7 @@
 
             var request =
             $.ajax({
-              url: '/client/format/',
+              url: '/format/',
               type: 'POST',
               dataType: 'json',
               data: data,
