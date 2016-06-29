@@ -20,7 +20,7 @@ lib64
 *.db
 *.sqlite3
 *.sql
-
+.idea/*
 # Installer logs
 pip-log.txt
 
