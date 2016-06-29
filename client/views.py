@@ -31,9 +31,9 @@ def format(request):
             headers = {}
 
         if method == 'GET':
-            response = requests.get(str(url), headers=headers)
+            response = requests.get(str(url), headers=headers, timeout=2)
         else:
-            response = requests.post(str(url), headers=headers)
+            response = requests.post(str(url), headers=headers, timeout=2)
 
         http_code = response.status_code
         if http_code == 200:
